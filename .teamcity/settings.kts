@@ -75,23 +75,6 @@ object CleanConfig : BuildType({
             scriptContent = "echo test"
         }
     }
-
-    cleanup {
-        keepRule {
-            id = "KEEP_RULE_3"
-            keepAtLeast = builds(30)
-            applyToBuilds {
-                inBranches {
-                    branchFilter = patterns("""
-                        +:*
-                        -:<default>
-                    """.trimIndent())
-                }
-            }
-            dataToKeep = everything()
-            preserveArtifactsDependencies = true
-        }
-    }
 })
 
 object HttpsGithubComInnayanMyrepository : GitVcsRoot({
