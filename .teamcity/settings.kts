@@ -33,7 +33,7 @@ project {
     buildType(CleanConfig)
 
     cleanup {
-        keep {
+        keepRule {
             id = "KEEP_RULE_1"
             keepAtLeast = days(30) {
                 since = lastSuccessfulBuild()
@@ -49,12 +49,6 @@ project {
             }
             preserveArtifactsDependencies = true
         }
-        all(days = 10)
-        history(days = 10)
-        artifacts(days = 10, artifactPatterns = """
-            +:**/*
-            -:cleanup1
-        """.trimIndent())
     }
 }
 
@@ -72,14 +66,16 @@ object CleanConfig : BuildType({
     }
 
     cleanup {
-        keep {
+        keepRule {
             id = "KEEP_RULE_3"
             keepAtLeast = builds(30)
             applyToBuilds {
-                inBranches("""
-                    +:*
-                    -:<default>
-                """.trimIndent())
+                inBranches {
+                    branchFilter = patterns("""
+                        +:*
+                        -:<default>
+                    """.trimIndent())
+                }
             }
             dataToKeep = everything()
             preserveArtifactsDependencies = true
