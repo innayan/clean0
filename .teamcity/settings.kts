@@ -75,6 +75,15 @@ object CleanConfig : BuildType({
             scriptContent = "echo test"
         }
     }
+
+    cleanup {
+        keepRule {
+            id = "KEEP_RULE_4"
+            keepAtLeast = allBuilds()
+            dataToKeep = everything()
+            preserveArtifactsDependencies = true
+        }
+    }
 })
 
 object HttpsGithubComInnayanMyrepository : GitVcsRoot({
