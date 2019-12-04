@@ -32,25 +32,23 @@ project {
 
     buildType(CleanConfig)
 
-    features {
-        feature {
-            id = "KEEP_RULE_1"
-            type = "keepRules"
-            param("limit.type", "NDaysSinceLastSuccessfulBuild")
-            param("keepData.1.type", "artifacts")
-            param("ruleDisabled", "false")
-            param("limit.daysCount", "30")
-            param("filters.1.status", "failed_to_start")
-            param("filters.1.type", "buildStatus")
-            param("keepData.1.artifactsPatterns", """
-                +:**/*
-                +:cleanup1_1
-            """.trimIndent())
-            param("preserveArtifacts", "true")
-        }
-    }
-
     cleanup {
+        keep {
+            id = "KEEP_RULE_1"
+            keepAtLeast = days(30) {
+                since = lastSuccessfulBuild()
+            }
+            applyToBuilds {
+                withStatus = failedToStart()
+            }
+            dataToKeep = historyAndStatistics {
+                preserveArtifacts = byPattern("""
+                    +:**/*
+                    +:cleanup1_1
+                """.trimIndent())
+            }
+            preserveArtifactsDependencies = true
+        }
         all(days = 10)
         history(days = 10)
         artifacts(days = 10, artifactPatterns = """
@@ -73,20 +71,18 @@ object CleanConfig : BuildType({
         }
     }
 
-    features {
-        feature {
+    cleanup {
+        keep {
             id = "KEEP_RULE_3"
-            type = "keepRules"
-            param("limit.type", "lastNBuilds")
-            param("keepData.1.type", "everything")
-            param("ruleDisabled", "false")
-            param("filters.1.pattern", """
-                +:*
-                -:<default>
-            """.trimIndent())
-            param("filters.1.type", "branchSpecs")
-            param("limit.buildsCount", "30")
-            param("preserveArtifacts", "true")
+            keepAtLeast = builds(30)
+            applyToBuilds {
+                inBranches("""
+                    +:*
+                    -:<default>
+                """.trimIndent())
+            }
+            dataToKeep = everything()
+            preserveArtifactsDependencies = true
         }
     }
 })
