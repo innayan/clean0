@@ -84,12 +84,6 @@ object CleanConfig : BuildType({
             preserveArtifactsDependencies = true
         }
         keepRule {
-            id = "KEEP_RULE_7"
-            keepAtLeast = allBuilds()
-            dataToKeep = everything()
-            preserveArtifactsDependencies = true
-        }
-        keepRule {
             id = "KEEP_RULE_8"
             keepAtLeast = allBuilds()
             dataToKeep = everything()
