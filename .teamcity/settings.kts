@@ -49,6 +49,17 @@ project {
             }
             preserveArtifactsDependencies = true
         }
+        keepRule {
+            id = "KEEP_RULE_2"
+            keepAtLeast = allBuilds()
+            applyToBuilds {
+                inBranches {
+                    branchFilter = patterns("+:*_root")
+                }
+            }
+            dataToKeep = everything()
+            preserveArtifactsDependencies = true
+        }
     }
 }
 
